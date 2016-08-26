@@ -1,0 +1,689 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" 
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head profile="http://www.w3.org/2006/03/hcard http://dublincore.org/documents/2008/08/04/dc-html/">
+  <meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+
+  <title>DNS Traceroute</title>
+
+  <style type="text/css" title="Xml2Rfc (sans serif)">
+  /*<![CDATA[*/
+	  a {
+	  text-decoration: none;
+	  }
+      /* info code from SantaKlauss at http://www.madaboutstyle.com/tooltip2.html */
+      a.info {
+          /* This is the key. */
+          position: relative;
+          z-index: 24;
+          text-decoration: none;
+      }
+      a.info:hover {
+          z-index: 25;
+          color: #FFF; background-color: #900;
+      }
+      a.info span { display: none; }
+      a.info:hover span.info {
+          /* The span will display just on :hover state. */
+          display: block;
+          position: absolute;
+          font-size: smaller;
+          top: 2em; left: -5em; width: 15em;
+          padding: 2px; border: 1px solid #333;
+          color: #900; background-color: #EEE;
+          text-align: left;
+      }
+	  a.smpl {
+	  color: black;
+	  }
+	  a:hover {
+	  text-decoration: underline;
+	  }
+	  a:active {
+	  text-decoration: underline;
+	  }
+	  address {
+	  margin-top: 1em;
+	  margin-left: 2em;
+	  font-style: normal;
+	  }
+	  body {
+	  color: black;
+	  font-family: verdana, helvetica, arial, sans-serif;
+	  font-size: 10pt;
+	  max-width: 55em;
+	  
+	  }
+	  cite {
+	  font-style: normal;
+	  }
+	  dd {
+	  margin-right: 2em;
+	  }
+	  dl {
+	  margin-left: 2em;
+	  }
+	
+	  ul.empty {
+	  list-style-type: none;
+	  }
+	  ul.empty li {
+	  margin-top: .5em;
+	  }
+	  dl p {
+	  margin-left: 0em;
+	  }
+	  dt {
+	  margin-top: .5em;
+	  }
+	  h1 {
+	  font-size: 14pt;
+	  line-height: 21pt;
+	  page-break-after: avoid;
+	  }
+	  h1.np {
+	  page-break-before: always;
+	  }
+	  h1 a {
+	  color: #333333;
+	  }
+	  h2 {
+	  font-size: 12pt;
+	  line-height: 15pt;
+	  page-break-after: avoid;
+	  }
+	  h3, h4, h5, h6 {
+	  font-size: 10pt;
+	  page-break-after: avoid;
+	  }
+	  h2 a, h3 a, h4 a, h5 a, h6 a {
+	  color: black;
+	  }
+	  img {
+	  margin-left: 3em;
+	  }
+	  li {
+	  margin-left: 2em;
+	  margin-right: 2em;
+	  }
+	  ol {
+	  margin-left: 2em;
+	  margin-right: 2em;
+	  }
+	  ol p {
+	  margin-left: 0em;
+	  }
+	  p {
+	  margin-left: 2em;
+	  margin-right: 2em;
+	  }
+	  pre {
+	  margin-left: 3em;
+	  background-color: lightyellow;
+	  padding: .25em;
+	  }
+	  pre.text2 {
+	  border-style: dotted;
+	  border-width: 1px;
+	  background-color: #f0f0f0;
+	  width: 69em;
+	  }
+	  pre.inline {
+	  background-color: white;
+	  padding: 0em;
+	  }
+	  pre.text {
+	  border-style: dotted;
+	  border-width: 1px;
+	  background-color: #f8f8f8;
+	  width: 69em;
+	  }
+	  pre.drawing {
+	  border-style: solid;
+	  border-width: 1px;
+	  background-color: #f8f8f8;
+	  padding: 2em;
+	  }
+	  table {
+	  margin-left: 2em;
+	  }
+	  table.tt {
+	  vertical-align: top;
+	  }
+	  table.full {
+	  border-style: outset;
+	  border-width: 1px;
+	  }
+	  table.headers {
+	  border-style: outset;
+	  border-width: 1px;
+	  }
+	  table.tt td {
+	  vertical-align: top;
+	  }
+	  table.full td {
+	  border-style: inset;
+	  border-width: 1px;
+	  }
+	  table.tt th {
+	  vertical-align: top;
+	  }
+	  table.full th {
+	  border-style: inset;
+	  border-width: 1px;
+	  }
+	  table.headers th {
+	  border-style: none none inset none;
+	  border-width: 1px;
+	  }
+	  table.left {
+	  margin-right: auto;
+	  }
+	  table.right {
+	  margin-left: auto;
+	  }
+	  table.center {
+	  margin-left: auto;
+	  margin-right: auto;
+	  }
+	  caption {
+	  caption-side: bottom;
+	  font-weight: bold;
+	  font-size: 9pt;
+	  margin-top: .5em;
+	  }
+	
+	  table.header {
+	  border-spacing: 1px;
+	  width: 95%;
+	  font-size: 10pt;
+	  color: white;
+	  }
+	  td.top {
+	  vertical-align: top;
+	  }
+	  td.topnowrap {
+	  vertical-align: top;
+	  white-space: nowrap; 
+	  }
+	  table.header td {
+	  background-color: gray;
+	  width: 50%;
+	  }
+	  table.header a {
+	  color: white;
+	  }
+	  td.reference {
+	  vertical-align: top;
+	  white-space: nowrap;
+	  padding-right: 1em;
+	  }
+	  thead {
+	  display:table-header-group;
+	  }
+	  ul.toc, ul.toc ul {
+	  list-style: none;
+	  margin-left: 1.5em;
+	  margin-right: 0em;
+	  padding-left: 0em;
+	  }
+	  ul.toc li {
+	  line-height: 150%;
+	  font-weight: bold;
+	  font-size: 10pt;
+	  margin-left: 0em;
+	  margin-right: 0em;
+	  }
+	  ul.toc li li {
+	  line-height: normal;
+	  font-weight: normal;
+	  font-size: 9pt;
+	  margin-left: 0em;
+	  margin-right: 0em;
+	  }
+	  li.excluded {
+	  font-size: 0pt;
+	  }
+	  ul p {
+	  margin-left: 0em;
+	  }
+	
+	  .comment {
+	  background-color: yellow;
+	  }
+	  .center {
+	  text-align: center;
+	  }
+	  .error {
+	  color: red;
+	  font-style: italic;
+	  font-weight: bold;
+	  }
+	  .figure {
+	  font-weight: bold;
+	  text-align: center;
+	  font-size: 9pt;
+	  }
+	  .filename {
+	  color: #333333;
+	  font-weight: bold;
+	  font-size: 12pt;
+	  line-height: 21pt;
+	  text-align: center;
+	  }
+	  .fn {
+	  font-weight: bold;
+	  }
+	  .hidden {
+	  display: none;
+	  }
+	  .left {
+	  text-align: left;
+	  }
+	  .right {
+	  text-align: right;
+	  }
+	  .title {
+	  color: #990000;
+	  font-size: 18pt;
+	  line-height: 18pt;
+	  font-weight: bold;
+	  text-align: center;
+	  margin-top: 36pt;
+	  }
+	  .vcardline {
+	  display: block;
+	  }
+	  .warning {
+	  font-size: 14pt;
+	  background-color: yellow;
+	  }
+	
+	
+	  @media print {
+	  .noprint {
+		display: none;
+	  }
+	
+	  a {
+		color: black;
+		text-decoration: none;
+	  }
+	
+	  table.header {
+		width: 90%;
+	  }
+	
+	  td.header {
+		width: 50%;
+		color: black;
+		background-color: white;
+		vertical-align: top;
+		font-size: 12pt;
+	  }
+	
+	  ul.toc a::after {
+		content: leader('.') target-counter(attr(href), page);
+	  }
+	
+	  ul.ind li li a {
+		content: target-counter(attr(href), page);
+	  }
+	
+	  .print2col {
+		column-count: 2;
+		-moz-column-count: 2;
+		column-fill: auto;
+	  }
+	  }
+	
+	  @page {
+	  @top-left {
+		   content: "Internet-Draft"; 
+	  } 
+	  @top-right {
+		   content: "December 2010"; 
+	  } 
+	  @top-center {
+		   content: "Abbreviated Title";
+	  } 
+	  @bottom-left {
+		   content: "Doe"; 
+	  } 
+	  @bottom-center {
+		   content: "Expires June 2011"; 
+	  } 
+	  @bottom-right {
+		   content: "[Page " counter(page) "]"; 
+	  } 
+	  }
+	
+	  @page:first { 
+		@top-left {
+		  content: normal;
+		}
+		@top-right {
+		  content: normal;
+		}
+		@top-center {
+		  content: normal;
+		}
+	  }
+  /*]]>*/
+  </style>
+
+  <link href="#rfc.toc" rel="Contents"/>
+<link href="#rfc.section.1" rel="Chapter" title="1 Introduction"/>
+<link href="#rfc.section.1.1" rel="Chapter" title="1.1 Requirements"/>
+<link href="#rfc.section.1.2" rel="Chapter" title="1.2 Terminology"/>
+<link href="#rfc.section.2" rel="Chapter" title="2 Protocol"/>
+<link href="#rfc.section.2.1" rel="Chapter" title="2.1 EDNS Support Requirement"/>
+<link href="#rfc.section.2.2" rel="Chapter" title="2.2 Behaviour of Authoritative Nameservers"/>
+<link href="#rfc.section.2.3" rel="Chapter" title="2.3 Behaviour of Intermediate Nameservers"/>
+<link href="#rfc.section.2.4" rel="Chapter" title="2.4 Behaviour of Clients"/>
+<link href="#rfc.section.2.5" rel="Chapter" title="2.5 The TRACE option"/>
+<link href="#rfc.section.3" rel="Chapter" title="3 Examples"/>
+<link href="#rfc.section.3.1" rel="Chapter" title="3.1 Complete Path example"/>
+<link href="#rfc.section.4" rel="Chapter" title="4 Use cases"/>
+<link href="#rfc.section.5" rel="Chapter" title="5 Security Considerations"/>
+<link href="#rfc.section.6" rel="Chapter" title="6 Performance Considerations"/>
+<link href="#rfc.section.7" rel="Chapter" title="7 Acknowledgements"/>
+<link href="#rfc.section.8" rel="Chapter" title="8 Notes"/>
+<link href="#rfc.references" rel="Chapter" title="9 References"/>
+<link href="#rfc.references.1" rel="Chapter" title="9.1 Normative References"/>
+<link href="#rfc.references.2" rel="Chapter" title="9.2 Informative References"/>
+<link href="#rfc.authors" rel="Chapter"/>
+
+
+  <meta name="generator" content="xml2rfc version 2.5.1 - http://tools.ietf.org/tools/xml2rfc" />
+  <link rel="schema.dct" href="http://purl.org/dc/terms/" />
+
+  <meta name="dct.creator" content="Vavrusa, M." />
+  <meta name="dct.identifier" content="urn:ietf:id:draft-vavrusa-dnsop-dns-traceroute-00" />
+  <meta name="dct.issued" scheme="ISO8601" content="2016-3-21" />
+  <meta name="dct.abstract" content="This document describes mechanism for path discovery in DNS query resolution process between the query sender and the authoritative source of the DNS response.  " />
+  <meta name="description" content="This document describes mechanism for path discovery in DNS query resolution process between the query sender and the authoritative source of the DNS response.  " />
+
+</head>
+
+<body>
+
+  <table class="header">
+    <tbody>
+    
+    	<tr>
+  <td class="left">Network Working Group</td>
+  <td class="right">M. Vavrusa</td>
+</tr>
+<tr>
+  <td class="left">Internet-Draft</td>
+  <td class="right">CloudFlare Inc.</td>
+</tr>
+<tr>
+  <td class="left">Intended status: Standards Track</td>
+  <td class="right">March 21, 2016</td>
+</tr>
+<tr>
+  <td class="left">Expires: September 22, 2016</td>
+  <td class="right"></td>
+</tr>
+
+    	
+    </tbody>
+  </table>
+
+  <p class="title">DNS Traceroute<br />
+  <span class="filename">draft-vavrusa-dnsop-dns-traceroute-00</span></p>
+  
+  <h1 id="rfc.abstract">
+  <a href="#rfc.abstract">Abstract</a>
+</h1>
+<p>This document describes mechanism for path discovery in DNS query resolution process between the query sender and the authoritative source of the DNS response.  </p>
+<h1 id="rfc.status">
+  <a href="#rfc.status">Status of This Memo</a>
+</h1>
+<p>This Internet-Draft is submitted in full conformance with the provisions of BCP 78 and BCP 79.</p>
+<p>Internet-Drafts are working documents of the Internet Engineering Task Force (IETF).  Note that other groups may also distribute working documents as Internet-Drafts.  The list of current Internet-Drafts is at http://datatracker.ietf.org/drafts/current/.</p>
+<p>Internet-Drafts are draft documents valid for a maximum of six months and may be updated, replaced, or obsoleted by other documents at any time.  It is inappropriate to use Internet-Drafts as reference material or to cite them other than as "work in progress."</p>
+<p>This Internet-Draft will expire on September 22, 2016.</p>
+<h1 id="rfc.copyrightnotice">
+  <a href="#rfc.copyrightnotice">Copyright Notice</a>
+</h1>
+<p>Copyright (c) 2016 IETF Trust and the persons identified as the document authors.  All rights reserved.</p>
+<p>This document is subject to BCP 78 and the IETF Trust's Legal Provisions Relating to IETF Documents (http://trustee.ietf.org/license-info) in effect on the date of publication of this document.  Please review these documents carefully, as they describe your rights and restrictions with respect to this document.  Code Components extracted from this document must include Simplified BSD License text as described in Section 4.e of the Trust Legal Provisions and are provided without warranty as described in the Simplified BSD License.</p>
+
+  
+  <hr class="noprint" />
+  <h1 class="np" id="rfc.toc"><a href="#rfc.toc">Table of Contents</a></h1>
+  <ul class="toc">
+
+  	<li>1.   <a href="#rfc.section.1">Introduction</a></li>
+<ul><li>1.1.   <a href="#rfc.section.1.1">Requirements</a></li>
+<li>1.2.   <a href="#rfc.section.1.2">Terminology</a></li>
+</ul><li>2.   <a href="#rfc.section.2">Protocol</a></li>
+<ul><li>2.1.   <a href="#rfc.section.2.1">EDNS Support Requirement</a></li>
+<li>2.2.   <a href="#rfc.section.2.2">Behaviour of Authoritative Nameservers</a></li>
+<li>2.3.   <a href="#rfc.section.2.3">Behaviour of Intermediate Nameservers</a></li>
+<li>2.4.   <a href="#rfc.section.2.4">Behaviour of Clients</a></li>
+<li>2.5.   <a href="#rfc.section.2.5">The TRACE option</a></li>
+</ul><li>3.   <a href="#rfc.section.3">Examples</a></li>
+<ul><li>3.1.   <a href="#rfc.section.3.1">Complete Path example</a></li>
+</ul><li>4.   <a href="#rfc.section.4">Use cases</a></li>
+<li>5.   <a href="#rfc.section.5">Security Considerations</a></li>
+<li>6.   <a href="#rfc.section.6">Performance Considerations</a></li>
+<li>7.   <a href="#rfc.section.7">Acknowledgements</a></li>
+<li>8.   <a href="#rfc.section.8">Notes</a></li>
+<li>9.   <a href="#rfc.references">References</a></li>
+<ul><li>9.1.   <a href="#rfc.references.1">Normative References</a></li>
+<li>9.2.   <a href="#rfc.references.2">Informative References</a></li>
+</ul><li><a href="#rfc.authors">Author's Address</a></li>
+
+
+  </ul>
+
+  <h1 id="rfc.section.1"><a href="#rfc.section.1">1.</a> <a href="#introduction" id="introduction">Introduction</a></h1>
+<p><a href="#RFC5001">[RFC5001]</a> introduced the NSID option for unique identification of DNS servers, it is however not transitive, so the recursive DNS servers are prohibited from adding NSID information of the authoritative servers contacted. Section 3.2. left transitive variant of this mechanism undefined.  </p>
+<p id="rfc.section.1.p.2">The implication is that the stub resolvers can only trace resolution problems to the first recursive server or forwarder, where the traceability ends. This poses a significant problem when investigating name resolution performance or failures, as the source of the problem is hidden from the client.  </p>
+<p id="rfc.section.1.p.3">An ad-hoc solution to part of the problem is a non-standard extension to authoritative DNS servers that returns the source address and either arbitrary identification of the DNS server instance or destination address, such as "whoami.akamai.net". The drawback is that additional query to special zone is required, only part of the resolution path is visible, and the special zone does not uniquely identify the authoritative server.  </p>
+<p id="rfc.section.1.p.4">This draft proposes a mechanism to store complete resolution path information as EDNS option in a way that provides end to end traceability for DNS clients - a "traceroute" for DNS.  </p>
+<h1 id="rfc.section.1.1"><a href="#rfc.section.1.1">1.1.</a> <a href="#requirements" id="requirements">Requirements</a></h1>
+<p id="rfc.section.1.1.p.1">The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in <a href="#RFC2119">[RFC2119]</a>.  </p>
+<h1 id="rfc.section.1.2"><a href="#rfc.section.1.2">1.2.</a> <a href="#terminology" id="terminology">Terminology</a></h1>
+<p id="rfc.section.1.2.p.1">The reader is assumed to be familiar with the basic DNS concepts described in <a href="#RFC1034">[RFC1034]</a>, <a href="#RFC1035">[RFC1035]</a>, <a href="#RFC2181">[RFC2181]</a> and <a href="#RFC6891">[RFC6891]</a>. NSID and server identification problem is described in <a href="#RFC5001">[RFC5001]</a>.  </p>
+<p id="rfc.section.1.2.p.2">Client: A Stub Resolver, Forwarding Resolver, or Recursive Resolver. A client to a Recursive Resolver or a Forwarding Resolver.  </p>
+<p id="rfc.section.1.2.p.3">Intermediate Nameserver: Any nameserver in between the Stub Resolver and the Authoritative Nameserver, such as a Recursive Resolver or a Forwarding Resolver.  </p>
+<p id="rfc.section.1.2.p.4">Authoritative Nameserver:  A nameserver that has authority over one or more DNS zones.  These are normally not contacted by Stub Resolver or end user clients directly but by Recursive Resolvers. Described in <a href="#RFC1035">[RFC1035]</a> Section 6.  </p>
+<p id="rfc.section.1.2.p.5">Server: An Intermediate Nameserver or Authoritative Nameserver.  </p>
+<p id="rfc.section.1.2.p.6">Hop: A DNS message exchange between Client and Server, e.g. client sending query to resolver and potentially receiving an answer.  </p>
+<p id="rfc.section.1.2.p.7">Resolution Path: A sequence of hops that are necessary to generate answer to original query, i.e. exchange between client and resolver, exchange between resolver and authoritative.  </p>
+<p id="rfc.section.1.2.p.8">Leaf: A Server that doesn't make additional DNS requests in order to resolve the query, e.g. Authoritative Nameserver.  </p>
+<p id="rfc.section.1.2.p.9">Open path: A path in which the last Hop is not leaf.  </p>
+<p id="rfc.section.1.2.p.10">Complete path: A path in which the last Hop is leaf.  </p>
+<p id="rfc.section.1.2.p.11">TRACE: An abbreviated EDNS "TRACE" option defined in this document.  </p>
+<h1 id="rfc.section.2"><a href="#rfc.section.2">2.</a> <a href="#protocol" id="protocol">Protocol</a></h1>
+<p id="rfc.section.2.p.1">The path information is encoded as a sequence of TRACE options, one for each hop on the query resolution path. The order of TRACE options in the OPT data establishes the order of resolution hops, e.g. first TRACE option in the response corresponds to first hop.  </p>
+<p id="rfc.section.2.p.2">Any Client on resolution path MAY attach an empty TRACE option to outgoing query, which starts the request to trace path starting from the next hop. Any Intermediate Nameserver compliant with this document that receives such query MUST copy the TRACE option to outgoing queries, and subsequently copy all non-empty TRACE options from upstream answers to final answer. If all such answers contained an empty TRACE option, the server MUST append a single empty TRACE option. This empty TRACE serves as a path terminator, and is not transitive.  </p>
+<h1 id="rfc.section.2.1"><a href="#rfc.section.2.1">2.1.</a> <a href="#edns-support-requirement" id="edns-support-requirement">EDNS Support Requirement</a></h1>
+<p id="rfc.section.2.1.p.1">This draft requires EDNS.  </p>
+<h1 id="rfc.section.2.2"><a href="#rfc.section.2.2">2.2.</a> <a href="#behaviour-of-authoritative-nameservers" id="behaviour-of-authoritative-nameservers">Behaviour of Authoritative Nameservers</a></h1>
+<p id="rfc.section.2.2.p.1">Authoritative Nameservers or other Leafs in DNS resolution path MUST append an empty TRACE option to signalise compliance with this draft. This enables client to determine whether the Resolution Path is complete or open.  </p>
+<p id="rfc.section.2.2.p.2">If an Authoritative Nameserver generates an error response due to an internal failure, it MAY NOT append the TRACE option.  </p>
+<h1 id="rfc.section.2.3"><a href="#rfc.section.2.3">2.3.</a> <a href="#behaviour-of-intermediate-nameservers" id="behaviour-of-intermediate-nameservers">Behaviour of Intermediate Nameservers</a></h1>
+<p id="rfc.section.2.3.p.1">DNS resolvers and other non-leafs in DNS propagate TRACE option to outgoing queries. An upstream server may respond with a (possibly empty) sequence of TRACE options terminated with an empty TRACE option. If the terminator TRACE option is not present, it either means that upstream server is not compatible with this document or deliberately chose to left the Resolution Path open (e.g. for privacy, or to avoid exposing internal network). The resolver MUST NOT append terminator TRACE option to final answer in this situation, but still MUST append all non-empty TRACE options.  </p>
+<p id="rfc.section.2.3.p.2">After each exchange of messages between Intermediate Nameserver and upstream Server, the Intermedia Server MUST add a TRACE describing the transaction.  </p>
+<p id="rfc.section.2.3.p.3">It may happen that the Intermediate Server answers from local cache, in this case it MUST respond with an empty TRACE option as it is Leaf.  </p>
+<p id="rfc.section.2.3.p.4">When upstream Server responds with an error response, it may not attach a TRACE. Intermediate Server should interpret this it as open path, as it cannot determine whether the upstream Server is Leaf or not.  </p>
+<h1 id="rfc.section.2.4"><a href="#rfc.section.2.4">2.4.</a> <a href="#behaviour-of-clients" id="behaviour-of-clients">Behaviour of Clients</a></h1>
+<p id="rfc.section.2.4.p.1">Client MAY interpret the sequence of TRACE options in the received answer to establish Resolution Path.  If the response doesn't contain TRACE option, it means that the upstream Server is not compliant with this document.  </p>
+<h1 id="rfc.section.2.5"><a href="#rfc.section.2.5">2.5.</a> <a href="#the-trace-option" id="the-trace-option">The TRACE option</a></h1>
+<p id="rfc.section.2.5.p.1">This protocol uses an EDNS0 <a href="#RFC6891">[RFC6891]</a>) option to encode information about Hop.  The option is structured as follows: </p>
+<div id="rfc.figure.1"/>
+<div id="fig-trace-option"/>
+<pre>
+            +0 (MSB)                            +1 (LSB)
+  +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+
+</pre>
+<p class="figure">Figure 1</p>
+<p id="rfc.section.2.5.p.2">0: |                          OPTION-CODE                          | +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+ 2: |                         OPTION-LENGTH                         | +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+ 4: |                           HOP-FLAGS                           | +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+ 6: |           NSID-LENGTH         |            FAMILY             | +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+ 8: |                             NSID...                           / +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+ /: |                        SOURCE ADDRESS...                      / +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+ /: |                     DESTINATION ADDRESS...                    / +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+ </p>
+<p/>
+
+<ul>
+  <li>(Defined in <a href="#RFC6891">[RFC6891]</a>) OPTION-CODE, 2 octets, for TRACE is 14 (0x00 0x0E).</li>
+  <li>(Defined in <a href="#RFC6891">[RFC6891]</a>) OPTION-LENGTH, 2 octets, contains the length of the payload (everything after OPTION-LENGTH) in octets.</li>
+  <li>HOP-FLAGS, 2 octets, contains bitfield of flags pertinent for this Hop defined in this document. It must be padded with 0 bits to end of the field.</li>
+  <li>NSID-LENGTH, 1 octet, contains the length of the NSID field length.</li>
+  <li>FAMILY, 2 octets, indicates the family of the address contained in the option, using address family codes as assigned by IANA in Address Family Numbers <a href="http://www.iana.org/assignments/address-family-numbers/address-family-numbers.xhtml">Address_Family_Numbers</a>. The length and format of the address parts depends on the value of FAMILY. This document only defines the format for FAMILY 0 (undisclosed), FAMILY 1 (IP version 4) and 2 (IP version 6), which are as follows: <ul><li>SOURCE ADDRESS, DESTINATION ADDRESS, variable number of octets, contains either an IPv4 or IPv6 address, depending on FAMILY, padding with 0 bits to pad to the end of the last octet needed. If the FAMILY 0 (undisclosed), the length of these fields is 0.</li></ul></li>
+  <li>An Intermediate Server receiving an TRACE option that uses far too many ADDRESS or NSID octets, MUST treat this option as malformed, and it MAY truncate the lengths of the fields to configured length.</li>
+  <li>All fields are in network byte order ("big-endian", per <a href="#RFC1700">[RFC1700]</a>, Data Notation).</li>
+  <li>An empty TRACE option has OPTION-LENGTH equal to 0 and no other data.</li>
+</ul>
+
+<p> </p>
+<h1 id="rfc.section.3"><a href="#rfc.section.3">3.</a> <a href="#examples" id="examples">Examples</a></h1>
+<h1 id="rfc.section.3.1"><a href="#rfc.section.3.1">3.1.</a> <a href="#complete-path-example" id="complete-path-example">Complete Path example</a></h1>
+<p/>
+
+<ul>
+  <li>Client (C) inserts an empty TRACE option to query to Resolver (R).</li>
+  <li>Resolver (R) copies empty TRACE option to query to Authoritative (A).</li>
+  <li>Authoritative is Leaf, and attaches an empty TRACE to response.</li>
+  <li>Resolver receives the empty TRACE, and appends TRACE between Resolver and Authoritative: {FLAGS: 0, NSID-LENGTH: 1, FAMILY: 1, ['A'], [SRC-IP], [DST-IP]}</li>
+  <li>Resolver establishes Closed Path and appends terminal TRACE: .</li>
+  <li>Client receives answer with 2 TRACE options in OPT: {{FLAGS: 0, NSID-LENGTH: 1, FAMILY: 1, ['A'], [SRC-IP], [DST-IP]}, }</li>
+  <li>Client establishes a Closed Path between Client - Resolver - Authoritative.</li>
+</ul>
+
+<p> </p>
+<p id="rfc.section.3.1.p.2">TBD </p>
+<h1 id="rfc.section.4"><a href="#rfc.section.4">4.</a> <a href="#use-cases" id="use-cases">Use cases</a></h1>
+<p id="rfc.section.4.p.1">TBD: Remove this section before publication.  </p>
+<p/>
+
+<ul>
+  <li>Debugging failures on resolution path</li>
+  <li>Clients consume the TRACE information for detailed error messages</li>
+  <li>Test end-end support for new DNS functionality (e.g. if all servers on path support it)</li>
+  <li>Path maximum MTU discovery</li>
+  <li>Mapping DNS global infrastructure</li>
+  <li>Probe resolver cache hit ratios</li>
+</ul>
+
+<p> </p>
+<h1 id="rfc.section.5"><a href="#rfc.section.5">5.</a> <a href="#security-considerations" id="security-considerations">Security Considerations</a></h1>
+<p id="rfc.section.5.p.1">This mechanism exposes information about the Resolution Path to Client. Since the information trickles down in responses, no additional information about the downstream path is exposed to upstream Servers, unlike in <a href="#RFC7871">[RFC7871]</a>, Section 11.1.  </p>
+<p id="rfc.section.5.p.2">Any Intermediate Nameserver MAY hide complete or partial information about upstream Path, for example if the upstream is in private network, or its location should not be disclosed.  </p>
+<p id="rfc.section.5.p.3">Any Intermediate Nameserver MAY strip or modify information about upstream path, the trust model is similar to DNS without DNSSEC as the OPT record encoding EDNS data (including TRACE) is not signed.  </p>
+<p id="rfc.section.5.p.4">TBD </p>
+<h1 id="rfc.section.6"><a href="#rfc.section.6">6.</a> <a href="#performance-considerations" id="performance-considerations">Performance Considerations</a></h1>
+<p id="rfc.section.6.p.1">Appending TRACE options increases response size. Any Server MAY choose to limit availability to queries over TCP, <a href="#RFC7858">[RFC7858]</a> DNS over Transport Layer Security, or queries containing valid <a href="#RFC7873">[RFC7873]</a> DNS Cookies.  </p>
+<p id="rfc.section.6.p.2">TBD </p>
+<h1 id="rfc.section.7"><a href="#rfc.section.7">7.</a> <a href="#acknowledgements" id="acknowledgements">Acknowledgements</a></h1>
+<h1 id="rfc.section.8"><a href="#rfc.section.8">8.</a> <a href="#notes" id="notes">Notes</a></h1>
+<p><a href="#RFC4892">[RFC4892]</a> identification through special names in CHAOS class is not applicable as the special zones are not part of the Internet class namespace.  </p>
+<h1 id="rfc.references"><a href="#rfc.references">9.</a> References</h1>
+<h1 id="rfc.references.1"><a href="#rfc.references.1">9.1.</a> Normative References</h1>
+<table>
+  <tbody>
+    <tr>
+      <td class="reference">
+        <b id="RFC1034">[RFC1034]</b>
+      </td>
+      <td class="top"><a>Mockapetris, P.</a>, "<a href="http://tools.ietf.org/html/rfc1034">Domain names - concepts and facilities</a>", STD 13, RFC 1034, DOI 10.17487/RFC1034, November 1987.</td>
+    </tr>
+    <tr>
+      <td class="reference">
+        <b id="RFC1035">[RFC1035]</b>
+      </td>
+      <td class="top"><a>Mockapetris, P.</a>, "<a href="http://tools.ietf.org/html/rfc1035">Domain names - implementation and specification</a>", STD 13, RFC 1035, DOI 10.17487/RFC1035, November 1987.</td>
+    </tr>
+    <tr>
+      <td class="reference">
+        <b id="RFC1700">[RFC1700]</b>
+      </td>
+      <td class="top"><a>Reynolds, J.</a> and <a>J. Postel</a>, "<a href="http://tools.ietf.org/html/rfc1700">Assigned Numbers</a>", RFC 1700, DOI 10.17487/RFC1700, October 1994.</td>
+    </tr>
+    <tr>
+      <td class="reference">
+        <b id="RFC2181">[RFC2181]</b>
+      </td>
+      <td class="top"><a>Elz, R.</a> and <a>R. Bush</a>, "<a href="http://tools.ietf.org/html/rfc2181">Clarifications to the DNS Specification</a>", RFC 2181, DOI 10.17487/RFC2181, July 1997.</td>
+    </tr>
+    <tr>
+      <td class="reference">
+        <b id="RFC6891">[RFC6891]</b>
+      </td>
+      <td class="top"><a>Damas, J.</a>, <a>Graff, M.</a> and <a>P. Vixie</a>, "<a href="http://tools.ietf.org/html/rfc6891">Extension Mechanisms for DNS (EDNS(0))</a>", STD 75, RFC 6891, DOI 10.17487/RFC6891, April 2013.</td>
+    </tr>
+    <tr>
+      <td class="reference">
+        <b id="RFC7858">[RFC7858]</b>
+      </td>
+      <td class="top"><a>Hu, Z.</a>, <a>Zhu, L.</a>, <a>Heidemann, J.</a>, <a>Mankin, A.</a>, <a>Wessels, D.</a> and <a>P. Hoffman</a>, "<a href="http://tools.ietf.org/html/rfc7858">Specification for DNS over Transport Layer Security (TLS)</a>", RFC 7858, DOI 10.17487/RFC7858, May 2016.</td>
+    </tr>
+    <tr>
+      <td class="reference">
+        <b id="RFC7873">[RFC7873]</b>
+      </td>
+      <td class="top"><a>Eastlake 3rd, D.</a> and <a>M. Andrews</a>, "<a href="http://tools.ietf.org/html/rfc7873">Domain Name System (DNS) Cookies</a>", RFC 7873, DOI 10.17487/RFC7873, May 2016.</td>
+    </tr>
+  </tbody>
+</table>
+<h1 id="rfc.references.2"><a href="#rfc.references.2">9.2.</a> Informative References</h1>
+<table>
+  <tbody>
+    <tr>
+      <td class="reference">
+        <b id="RFC2119">[RFC2119]</b>
+      </td>
+      <td class="top"><a>Bradner, S.</a>, "<a href="http://tools.ietf.org/html/rfc2119">Key words for use in RFCs to Indicate Requirement Levels</a>", BCP 14, RFC 2119, DOI 10.17487/RFC2119, March 1997.</td>
+    </tr>
+    <tr>
+      <td class="reference">
+        <b id="RFC4892">[RFC4892]</b>
+      </td>
+      <td class="top"><a>Woolf, S.</a> and <a>D. Conrad</a>, "<a href="http://tools.ietf.org/html/rfc4892">Requirements for a Mechanism Identifying a Name Server Instance</a>", RFC 4892, DOI 10.17487/RFC4892, June 2007.</td>
+    </tr>
+    <tr>
+      <td class="reference">
+        <b id="RFC5001">[RFC5001]</b>
+      </td>
+      <td class="top"><a>Austein, R.</a>, "<a href="http://tools.ietf.org/html/rfc5001">DNS Name Server Identifier (NSID) Option</a>", RFC 5001, DOI 10.17487/RFC5001, August 2007.</td>
+    </tr>
+    <tr>
+      <td class="reference">
+        <b id="RFC7871">[RFC7871]</b>
+      </td>
+      <td class="top"><a>Contavalli, C.</a>, <a>van der Gaast, W.</a>, <a>Lawrence, D.</a> and <a>W. Kumari</a>, "<a href="http://tools.ietf.org/html/rfc7871">Client Subnet in DNS Queries</a>", RFC 7871, DOI 10.17487/RFC7871, May 2016.</td>
+    </tr>
+  </tbody>
+</table>
+<h1 id="rfc.authors">
+  <a href="#rfc.authors">Author's Address</a>
+</h1>
+<div class="avoidbreak">
+  <address class="vcard">
+	<span class="vcardline">
+	  <span class="fn">Marek Vavrusa</span> 
+	  <span class="n hidden">
+		<span class="family-name">Vavrusa</span>
+	  </span>
+	</span>
+	<span class="org vcardline">CloudFlare Inc.</span>
+	<span class="adr">
+	  <span class="vcardline">101 Townsend St.</span>
+
+	  <span class="vcardline">
+		<span class="locality">San Francisco</span>,  
+		<span class="region"></span>
+		<span class="code">94107</span>
+	  </span>
+	  <span class="country-name vcardline">USA</span>
+	</span>
+	<span class="vcardline">EMail: <a href="mailto:mvavrusa@cloudflare.com">mvavrusa@cloudflare.com</a></span>
+
+  </address>
+</div>
+
+</body>
+</html>
